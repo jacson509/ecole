@@ -1,0 +1,27 @@
+{% extends "capteurs/base.html" %}
+
+{% block title %}
+    Supprimer {{ type_capteur.nom }}
+{% endblock %}
+
+{% block content %}
+    <section class="card narrow">
+        <h2>Confirmer la suppression</h2>
+
+        <p>
+            Supprimer le type <strong>{{ type_capteur.nom }}</strong> ?
+        </p>
+
+        <form method="post" data-confirm="Confirmer la suppression du type « {{ type_capteur.nom|escapejs }} » ?">
+            {% csrf_token %}
+
+            <button class="btn btn-danger" type="submit">
+                Confirmer
+            </button>
+
+            <a class="btn btn-secondary" href="{% url 'capteurs:types' %}">
+                Annuler
+            </a>
+        </form>
+    </section>
+{% endblock %}

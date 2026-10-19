@@ -1,0 +1,109 @@
+{% extends "capteurs/base.html" %}
+
+{% block title %}Liste des capteurs{% endblock %}
+
+{% block content %}
+<section class="card">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Inventaire</p>
+            <h2>Rechercher un capteur</h2>
+        </div>
+
+        <div class="actions">
+            <a class="btn" href="{% url 'capteurs:ajouter' %}">
+                + Ajouter un capteur
+            </a>
+            <a class="btn btn-secondary" href="{% url 'capteurs:types' %}">
+                Gérer les catégories
+            </a>
+        </div>
+    </div>
+
+    <form method="get" class="search-form">
+        {{ form.as_p }}
+
+        <div class="actions">
+            <button class="btn" type="submit">Rechercher</button>
+            <a class="btn btn-secondary" href="{% url 'capteurs:liste' %}">
+                Réinitialiser
+            </a>
+        </div>
+    </form>
+</section>
+
+<section class="card">
+    <div class="section-heading">
+        <h2>Capteurs</h2>
+        <span class="count">{{ capteurs|length }} résultat(s)</span>
+    </div>
+
+    {% if capteurs %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Catégorie</th>
+                    <th>Emplacement</th>
+                    <th>État</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for capteur in capteurs %}
+                <tr>
+                    <td>
+                        <a class="table-link" href="{% url 'capteurs:detail' capteur.pk %}">
+                            {{ capteur.nom }}
+                        </a>
+                    </td>
+
+                    <td>{{ capteur.type_capteur.nom }}</td>
+                    <td>{{ capteur.emplacement }}</td>
+
+                    <td>
+                        <span class="badge {% if not capteur.actif %}inactive{% endif %}">
+                            {% if capteur.actif %}Actif{% else %}Inactif{% endif %}
+                        </span>
+                    </td>
+
+                    <td>{{ capteur.description|default:"—" }}</td>
+
+                    <td class="row-actions">
+                        <a href="{% url 'capteurs:modifier' capteur.pk %}">
+                            Modifier
+                        </a>
+
+                        <form
+                            class="inline-form"
+                            method="post"
+                            action="{% url 'capteurs:supprimer' capteur.pk %}"
+                            data-confirm="Supprimer définitivement le capteur « {{ capteur.nom|escapejs }} » ?"
+                        >
+                            {% csrf_token %}
+
+                            <button class="link-danger" type="submit">
+                                Supprimer
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+        <h3>Aucun capteur trouvé</h3>
+        <p>Ajoutez un capteur ou modifiez les critères de recherche.</p>
+        <a class="btn" href="{% url 'capteurs:ajouter' %}">
+            Ajouter un capteur
+        </a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Inventaire IoT{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<header class="site-header">
+    <div class="header-inner">
+        <div><h1>Inventaire des capteurs IoT</h1><p>Application Django — gestion de l'inventaire</p></div>
+        <nav aria-label="Navigation principale">
+            <a href="{% url 'capteurs:liste' %}">Capteurs</a>
+            <a href="{% url 'capteurs:types' %}">Types de capteurs</a>
+        </nav>
+    </div>
+</header>
+<main>
+    {% if messages %}<div class="messages">{% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+    {% block content %}{% endblock %}
+</main>
+<footer>Inventaire IoT · CCNB</footer>
+<script>
+document.addEventListener('submit', function (event) {
+    const form = event.target;
+    if (form.matches('[data-confirm]')) {
+        const question = form.getAttribute('data-confirm') || 'Confirmer cette suppression ?';
+        if (!window.confirm(question)) event.preventDefault();
+    }
+});
+</script>
+</body>
+</html>

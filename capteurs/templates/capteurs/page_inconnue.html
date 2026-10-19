@@ -1,0 +1,22 @@
+{% extends "capteurs/base.html" %}
+
+{% block title %}
+    Page introuvable
+{% endblock %}
+
+{% block content %}
+    <section class="card narrow empty-state">
+        <div class="error-code">404</div>
+
+        <h2>Oups, cette page est introuvable</h2>
+
+        <p>
+            L'adresse est peut-être incorrecte ou la page a été déplacée.
+            Vérifiez l'adresse ou revenez à l'inventaire.
+        </p>
+
+        <a class="btn" href="{% url 'capteurs:liste' %}">
+            Retour à l'accueil
+        </a>
+    </section>
+{% endblock %}

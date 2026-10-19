@@ -1,0 +1,31 @@
+{% extends "capteurs/base.html" %}
+
+{% block title %}
+    {{ titre }}
+{% endblock %}
+
+{% block content %}
+    <section class="card narrow">
+        <h2>{{ titre }}</h2>
+
+        <p>
+            Le nom correspond au modèle du matériel (ex. DHT22, PIR, MQ-7, LDR ou HC-SR04). Choisissez ensuite sa catégorie fonctionnelle.
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <div class="actions">
+                <button class="btn" type="submit">
+                    Enregistrer
+                </button>
+
+                <a class="btn btn-secondary" href="{% url 'capteurs:liste' %}">
+                    Annuler
+                </a>
+            </div>
+        </form>
+    </section>
+{% endblock %}

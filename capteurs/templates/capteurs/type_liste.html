@@ -1,0 +1,73 @@
+{% extends "capteurs/base.html" %}
+
+{% block title %}
+    Catégories de capteurs
+{% endblock %}
+
+{% block content %}
+    <section class="card">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Configuration</p>
+
+                <h2>Catégories de capteurs</h2>
+
+                <p>
+                    Une catégorie décrit ce que le capteur mesure ou détecte. Le modèle (DHT22, PIR, MQ-7…) se saisit dans la fiche du capteur.
+                </p>
+            </div>
+
+            <a class="btn" href="{% url 'capteurs:type_ajouter' %}">
+                + Ajouter une catégorie
+            </a>
+        </div>
+
+        {% if types %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Catégorie</th>
+                            <th>Description</th>
+                            <th>Capteurs associés</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for type in types %}
+                            <tr>
+                                <td>{{ type.nom }}</td>
+
+                                <td>{{ type.description|default:"—" }}</td>
+
+                                <td>{{ type.capteurs.count }}</td>
+
+                                <td class="row-actions">
+                                    <a href="{% url 'capteurs:type_modifier' type.pk %}">
+                                        Modifier
+                                    </a>
+
+                                    <form
+                                        class="inline-form"
+                                        method="post"
+                                        action="{% url 'capteurs:type_supprimer' type.pk %}"
+                                        data-confirm="Supprimer la catégorie « {{ type.nom|escapejs }} » ? Si des capteurs l'utilisent, la suppression sera refusée."
+                                    >
+                                        {% csrf_token %}
+
+                                        <button class="link-danger" type="submit">
+                                            Supprimer
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>Aucune catégorie enregistrée.</p>
+        {% endif %}
+    </section>
+{% endblock %}

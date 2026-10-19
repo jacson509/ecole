@@ -1,0 +1,54 @@
+{% extends "capteurs/base.html" %}
+
+{% block title %}
+    {{ capteur.nom }}
+{% endblock %}
+
+{% block content %}
+    <section class="card">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Fiche du capteur</p>
+                <h2>{{ capteur.nom }}</h2>
+            </div>
+
+            <span class="badge {% if not capteur.actif %}inactive{% endif %}">
+                {% if capteur.actif %}Actif{% else %}Inactif{% endif %}
+            </span>
+        </div>
+
+        <dl class="details-grid">
+            <dt>Type</dt>
+            <dd>{{ capteur.type_capteur.nom }} ({{ capteur.type_capteur.code }})</dd>
+
+            <dt>Emplacement</dt>
+            <dd>{{ capteur.emplacement }}</dd>
+
+            <dt>Description</dt>
+            <dd>{{ capteur.description|default:"Aucune description" }}</dd>
+        </dl>
+
+        <div class="actions">
+            <a class="btn" href="{% url 'capteurs:modifier' capteur.pk %}">
+                Modifier
+            </a>
+
+            <form
+                class="inline-form"
+                method="post"
+                action="{% url 'capteurs:supprimer' capteur.pk %}"
+                data-confirm="Supprimer définitivement le capteur « {{ capteur.nom|escapejs }} » ?"
+            >
+                {% csrf_token %}
+
+                <button class="btn btn-danger" type="submit">
+                    Supprimer
+                </button>
+            </form>
+
+            <a class="btn btn-secondary" href="{% url 'capteurs:liste' %}">
+                Retour à la liste
+            </a>
+        </div>
+    </section>
+{% endblock %}
